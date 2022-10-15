@@ -82,7 +82,15 @@ export class MenuItemsService {
         }
     ]
   */
-  async getMenuItems() {
-    throw new Error('TODO in task 3');
-  }
+
+    // This is just a good way to have children but obviosuly it is not fetching all the children, I was not able to get this thing figured out, but my idea is that we will need a recursive query then format the response in the way we want.
+    async getMenuItems() {
+        return await this.menuItemRepository
+        .scope('withAllChildren')
+        .findAll({
+            where:{
+                parentId: null
+            },
+        })
+    }
 }

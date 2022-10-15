@@ -1,6 +1,8 @@
 import { Get, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Op } from 'sequelize';
 import Event from './entities/event.entity';
+import Workshop from './entities/workshop.entity';
 
 @Injectable()
 export class EventsService {
@@ -91,7 +93,13 @@ export class EventsService {
 
   @Get('events')
   async getEventsWithWorkshops() {
-    throw new Error('TODO task 1');
+    // We can define a relation and then fetch all the workshops inside it
+    return this.eventRepository.findAll({
+      include: [{
+        model: Workshop,
+      }],
+    })
+    // throw new Error('TODO task 1');
   }
 
   /* TODO: complete getFutureEventWithWorkshops so that it returns events with workshops, that have not yet started
@@ -161,6 +169,16 @@ export class EventsService {
      */
   @Get('futureevents')
   async getFutureEventWithWorkshops() {
-    throw new Error('TODO task 2');
+    
+    return this.eventRepository.findAll({
+      include: [{
+        model: Workshop,
+        where:{ 
+          start: {
+            [Op.gt]: new Date(new Date() as any - 24 * 60 * 60 * 1000)
+          } 
+        }
+      }],
+    })
   }
 }

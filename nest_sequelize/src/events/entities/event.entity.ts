@@ -4,9 +4,11 @@ import {
   Model,
   AutoIncrement,
   PrimaryKey,
+  HasMany
 } from 'sequelize-typescript';
 import { ModelAttributeColumnOptions } from 'sequelize';
 import { Injectable } from '@nestjs/common';
+import Workshop from './workshop.entity';
 
 @Injectable()
 @Table
@@ -21,4 +23,7 @@ export default class Event extends Model {
 
   @Column({ type: 'datetime' } as ModelAttributeColumnOptions)
   createdAt: string;
+
+  @HasMany(() => Workshop)	
+  workshops: Workshop[];
 }
